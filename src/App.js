@@ -1,25 +1,53 @@
-import logo from './logo.svg';
-import './App.css';
+import React, {setState, useState } from "react";
+// Handle console logs
+import "utils/dropConsole";
+// Styles
+import "fontsource-roboto";
+// ROUTER
+import { BrowserRouter, NavLink } from "react-router-dom";
+import { RouterConfig } from "navigation/RouterConfig";
+// MUI Theme
+import { ThemeProvider, Button, createMuiTheme } from "@material-ui/core";
+import { ThemeSwitch } from "components/ThemeSwitch";
+import { dark, light } from "styles/muiTheme";
+import "./App.css";
+import { ProvideAuth } from "navigation/Auth/ProvideAuth";
+import {HeaderNav} from "components/HeaderNav";
+ 
+// Redux
+import { Provider } from "react-redux";
+import {store} from "redux/store";
+import axios from 'axios';
+ 
 
 function App() {
+  
+
+   
+  
+
+  
+
+  const [darkState, setDarkState] = useState(false);
+  const handleThemeChange = () => {
+    setDarkState(!darkState);
+    console.log("theme=", darkState ? "dark" : "light");
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <div>
+      
+   
+        <HeaderNav/>
+          
+        <Provider store={store}>
+            <ProvideAuth>
+              <BrowserRouter>
+                <RouterConfig />
+              </BrowserRouter>
+            </ProvideAuth>
+        </Provider>
+      </div>
   );
 }
-
 export default App;
