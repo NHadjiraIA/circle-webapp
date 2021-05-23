@@ -8,4 +8,5 @@
 export {getAllUsers} from './userServices';
 export {getUserDetails} from './userServices';
 export {getQuestions} from './questionService';
-export {getAllQuestions} from 'http://localhost:5000/question';
+export {getFields} from './fieldsService'
+ 

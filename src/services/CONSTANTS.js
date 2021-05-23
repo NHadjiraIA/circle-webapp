@@ -21,3 +21,4 @@
 export const GET_ALL_USERS = () => `/data/users`;
 export const GET_USER_DETAILS = (id) => `/data/user`;
 export const GET_ALL_QUESTIONS = () => 'http://localhost:5000/question';
+export const GET_ALL_FIELDS = () =>'http://localhost:5000/fields';

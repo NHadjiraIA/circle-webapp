@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { getQuestions } from "services";
 import {Question} from "components/Question"
+import { Radio } from "components/RadioComponent";
 
 export const Questions = () => {
-     
-
+ 
     const [questions, setquestions] = useState(null);
-   
+    const [selected, setSelected] = useState("first");
 
     useEffect(() => {
         console.log("SS:: listQuestions called ");
@@ -44,16 +44,24 @@ export const Questions = () => {
               
               <div className="question" key={index}>
                         <h1> this is a first question </h1>
-                        <h3>question {index + 1}</h3>
-                        <h2>{question.content_question}</h2>
+                        
+                            <Radio
+                            value="first"
+                            selected={selected}
+
+                            text={ <h3>question {index + 1}</h3>,question.content_question}
+                            onChange={setSelected}
+                          />     
+                 
                   <div className="details">
-                                 
-                   
+                 
                    </div>
                         
                  </div>
                     );
           })}
+         
+     
             </div>
     
     </>

@@ -9,6 +9,7 @@ import Login from "./Auth/Login";
 import { AuthorizedPage1 } from "pages/AuthorizedPage1";
 import PrivateRoute from "./Auth/PrivateRoute";
 import { Test } from "pages/Test";
+import { fieldQuestion } from "pages/FieldQuestion"
 
 
 export const RouterConfig = () => {
@@ -21,7 +22,7 @@ export const RouterConfig = () => {
         <Route exact path={PAGE1} component={Page1} />
         <Route exact path={TEST} component={Test}/>
         <Route exact path={HADJIRA} component={Test}/>
-        <Route exact path={START} component={Test}/>
+        <Route exact path={START} component={fieldQuestion}/>
         <Route path="/login">
           <Login />
         </Route>

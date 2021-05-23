@@ -10,9 +10,14 @@ const HomeView = props => {
     const goTo = (path) => {
         history.push(path || START);
     }
+
+
+     
+ 
     return (
         <div>
-             <div styles="width: 100%; height: 100%; position: absolute;">
+        
+        <div styles="width: 100%; height: 100%; position: absolute;">
       <div className="valign" styles="width: 100%;">
         <div className="container">
           <div className="row">
