@@ -18,7 +18,11 @@
 // export const GET_USER_DETAILS = (id) => `https://jsonplaceholder.typicode.com/users/${id}`;
 
 // Local endpoints. Uncomment below section to use dummy local data.
+ 
+export const BASE_ADDRESS = () => 'http://localhost:5000'
 export const GET_ALL_USERS = () => `/data/users`;
 export const GET_USER_DETAILS = (id) => `/data/user`;
-export const GET_ALL_QUESTIONS = () => 'http://localhost:5000/question';
-export const GET_ALL_FIELDS = () =>'http://localhost:5000/fields';
+export const GET_ALL_QUESTIONS = () => BASE_ADDRESS() + '/question';
+export const GET_ONE_QUESTION = (id_question) => BASE_ADDRESS() + '/question'+'?id_question='+id_question;
+export const GET_ALL_FIELDS = () => BASE_ADDRESS() + '/fields';
+export const GET_NEXT_QUESTION = (id_question,id_chosen_answer,id_field) => BASE_ADDRESS() + '/api/v1/questions/next'+'?id_question='+id_question+'&'+'id_chosen_answer='+id_chosen_answer+'&id_field='+id_field;

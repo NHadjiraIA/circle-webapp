@@ -3,13 +3,16 @@ import { Switch, Route } from "react-router-dom";
 import Home from "pages/Home";
 import Dashboard from "pages/Dashboard";
 import { NotFound } from "navigation/NotFound";
-import { ROOT, DASHBOARD, PAGE1, AUTH_PAGE1, TEST, HADJIRA, START } from "navigation/CONSTANTS";
+import { ROOT, DASHBOARD, PAGE1, AUTH_PAGE1, TEST, HADJIRA, START, NEXT_QUESTION ,QUESTION } from "navigation/CONSTANTS";
 import { Page1 } from "pages/Page1";
 import Login from "./Auth/Login";
 import { AuthorizedPage1 } from "pages/AuthorizedPage1";
 import PrivateRoute from "./Auth/PrivateRoute";
 import { Test } from "pages/Test";
 import { fieldQuestion } from "pages/FieldQuestion"
+import { nextQuestion } from "pages/NextQuestion"
+import { Question } from "pages/Question"
+ 
 
 
 export const RouterConfig = () => {
@@ -23,6 +26,8 @@ export const RouterConfig = () => {
         <Route exact path={TEST} component={Test}/>
         <Route exact path={HADJIRA} component={Test}/>
         <Route exact path={START} component={fieldQuestion}/>
+        <Route exact path={NEXT_QUESTION} component={nextQuestion}/>
+        <Route exact path={QUESTION} component={Question}/>
         <Route path="/login">
           <Login />
         </Route>

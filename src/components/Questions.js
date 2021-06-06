@@ -1,19 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { getQuestions } from "services";
+import { getQuestion } from "services";
 import {Question} from "components/Question"
 import { Radio } from "components/RadioComponent";
 
-export const Questions = () => {
- 
+export const Questions = () => { 
     const [questions, setquestions] = useState(null);
     const [selected, setSelected] = useState("first");
-
     useEffect(() => {
         console.log("SS:: listQuestions called ");
         return new Promise((resolve, reject) => {
-          try {
+          try {             
             // do db call or API endpoint axios call here and return the promise.
-            getQuestions()
+            getQuestion(2)
               .then((res) => {
                 console.log("getQuestions called ", res);
                 setquestions(res);  
@@ -36,34 +34,16 @@ export const Questions = () => {
 <div className="questions">
     {questions &&
           questions.map((question, index) => {
-            const cleanedDate = new Date(question.released).toDateString();
-            //const authors = question.authors.join(", ");
-           
-          
-            return (
-              
+            return (              
               <div className="question" key={index}>
                         <h1> this is a first question </h1>
-                        
-                            <Radio
-                            value="first"
-                            selected={selected}
-
-                            text={ <h3>question {index + 1}</h3>,question.content_question}
-                            onChange={setSelected}
-                          />     
-                 
-                  <div className="details">
-                 
-                   </div>
-                        
+                         <p>{question.content_question}</p>
+                  <div className="details">                 
+                   </div>                        
                  </div>
                     );
-          })}
-         
-     
-            </div>
-    
+          })}           
+            </div>    
     </>
     );
   }

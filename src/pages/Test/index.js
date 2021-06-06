@@ -1,5 +1,5 @@
 import React from 'react'
-import { ROOT } from 'navigation/CONSTANTS'
+import { START } from 'navigation/CONSTANTS'
  
 import {Link } from 'react-router-dom'
  

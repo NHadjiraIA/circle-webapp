@@ -1,54 +1,50 @@
 import React, { useEffect, useState } from "react"; 
 import { useHistory } from "react-router-dom";
-import { getFields } from "services";
+import { getNextQuestion, getQuestion } from "services";
 import {Question} from "components/Question"
-import {NEXT_QUESTION} from 'navigation/CONSTANTS'
-import {QUESTION} from 'navigation/CONSTANTS'  
 // import { Radio } from "components/RadioComponent";
 import '../styles/materialize.css';
 import '../styles/materialize.min.css';
 import '../styles/body.css';
+import {NEXT_QUESTION} from 'navigation/CONSTANTS' 
 
-export const FieldQuestion = () => {
+
+ 
+export const NextQuestion = () => {
   const history = useHistory();
-  const goTo = (path) =>   {   
-    console.log('this is function goto');   
-    console.log(selectedFieldId);     
+  const goTo = (path) => {
     history.push(NEXT_QUESTION);
 }
-const questionFunc = (path) => {
-  history.push(QUESTION);
-}
-    const [fields, setfields] = useState(null);
-    const [firstFieldQuestion, setFirstFieldsQuestion] = useState(null);
-    const[selectedFieldId, setSelectedFieldId] = useState();
+    const [currentQuestion, setCurrentQuestion] = useState(null);
+    const [responseChoices, setResponseChoices] = useState(null);
+    const[selectedResponseChoiceId, setSelectedResponseChoiceId] = useState();
 
     const nextQuestionFunction = (event) => {
       event.preventDefault();
-      console.log(selectedFieldId)
-      history.push('/nextquestion', {selectedFieldId});
+      console.log(selectedResponseChoiceId)
+      history.push('/nextquestion', {selectedResponseChoiceId});
     }
      
     const selectChangedHandler = event => {
-      console.log('this is the selected field');
-      console.log(event.target.value.name_field);
-      console.log(setSelectedFieldId(event.target.value));    
+      setSelectedResponseChoiceId(event.target.value);
+      console.log(setCurrentQuestion);
     }
- 
+
     useEffect(() => {
-        console.log("SS:: listFields called ");
+        console.log("SS:: listChoices called ");
         return new Promise((resolve, reject) => {
           try {
             // do db call or API endpoint axios call here and return the promise.
-            getFields()
+            getNextQuestion(8,24,2)
               .then((res) => {
-                setfields(res);
-                setFirstFieldsQuestion(res.firstFieldQuestion); 
+                setCurrentQuestion(res);  
+                console.log(res.responseChoices);
+                setResponseChoices(res.responseChoices);
                 resolve(res);
               })
               .catch((err) => {
-                console.log("getFields > err=", err);
-                setfields([]); 
+                console.log("getChoices > err=", err);
+                setCurrentQuestion([]); 
                 reject("Request error!");
               });
           } catch (error) {
@@ -58,7 +54,7 @@ const questionFunc = (path) => {
         });
       }, []);
     return (
-    <>
+      <>
   <div className="container">
         <div className="row"></div>
       </div>
@@ -69,25 +65,26 @@ const questionFunc = (path) => {
               <form onSubmit={nextQuestionFunction}>
                 <div className="card">
                   <div className="card-content">
-                    <span className="card-title green-text">Please choose your industry from below</span>
+                    <span className="card-title green-text">
+                           <p> {currentQuestion?.title} </p>
+                      </span>
                     <div className="row">
                       <div className="col s12">
                      </div>
                     </div>
-                 
-                    {fields &&
-                      fields.map((field) => {
+                    {responseChoices &&
+                     responseChoices.map((responseChoice) => {
                         return (
                           <div  >   
-                            <label>
-                            <input
-                                type="radio" 
-                                value={field}
-                                checked={selectedFieldId == field.id_field}
-                                onChange={selectChangedHandler}/>
-                              <span>{field.name_field}</span>
-                            </label>              
-                          </div>);
+                          <label>
+                          <input
+                              type="radio" 
+                              value={responseChoice.idResponseChoice}
+                              checked={selectedResponseChoiceId == responseChoice.idResponseChoice}
+                              onChange={selectChangedHandler}/>
+                            <span>{responseChoice.title}</span>
+                          </label>              
+                        </div>);
                       })}
                 
                   </div>
@@ -103,9 +100,6 @@ const questionFunc = (path) => {
                       <button className="btn waves-effect waves-light green right" type="submit" name="next_button" onClick={()=>goTo(NEXT_QUESTION)}>Next
                         <i className="material-icons right">navigate_next</i>
                       </button>
-                      <button className="btn waves-effect waves-light green right" type="submit" name="next_button" onClick={()=>questionFunc(QUESTION)}>Test
-                        <i className="material-icons right">navigate_next</i>
-                      </button>
                     </div>
                   </div>
                 </div>
@@ -118,4 +112,4 @@ const questionFunc = (path) => {
     </>
     );
   }
-export default FieldQuestion;
+export default NextQuestion;

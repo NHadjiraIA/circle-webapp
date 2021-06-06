@@ -7,6 +7,7 @@
 
 export {getAllUsers} from './userServices';
 export {getUserDetails} from './userServices';
-export {getQuestions} from './questionService';
+export {getQuestion} from './questionService';
 export {getFields} from './fieldsService'
+export {getNextQuestion} from './nextQuestionService'
  
