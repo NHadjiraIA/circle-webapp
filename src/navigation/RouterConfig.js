@@ -3,7 +3,7 @@ import { Switch, Route } from "react-router-dom";
 import Home from "pages/Home";
 import Dashboard from "pages/Dashboard";
 import { NotFound } from "navigation/NotFound";
-import { ROOT, DASHBOARD, PAGE1, AUTH_PAGE1, TEST, HADJIRA, START, NEXT_QUESTION ,QUESTION } from "navigation/CONSTANTS";
+import { ROOT, DASHBOARD, PAGE1, AUTH_PAGE1, TEST, HADJIRA, START, NEXT_QUESTION, REPORT ,QUESTION } from "navigation/CONSTANTS";
 import { Page1 } from "pages/Page1";
 import Login from "./Auth/Login";
 import { AuthorizedPage1 } from "pages/AuthorizedPage1";
@@ -12,6 +12,7 @@ import { Test } from "pages/Test";
 import { fieldQuestion } from "pages/FieldQuestion"
 import { nextQuestion } from "pages/NextQuestion"
 import { Question } from "pages/Question"
+import { report } from "pages/Report"
  
 
 
@@ -28,6 +29,7 @@ export const RouterConfig = () => {
         <Route exact path={START} component={fieldQuestion}/>
         <Route exact path={NEXT_QUESTION} component={nextQuestion}/>
         <Route exact path={QUESTION} component={Question}/>
+        <Route exact path={REPORT} component={report}/>
         <Route path="/login">
           <Login />
         </Route>

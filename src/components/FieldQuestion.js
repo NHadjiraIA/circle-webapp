@@ -11,17 +11,26 @@ import '../styles/body.css';
 
 export const FieldQuestion = () => {
   const history = useHistory();
-  const goTo = (path) =>   {   
-    console.log('this is function goto');   
-    console.log(selectedFieldId);     
-    history.push(NEXT_QUESTION);
+  const goTo = () =>   {  
+    history.push({
+      pathname: NEXT_QUESTION,
+      state: { 
+        question: firstFieldQuestion,
+        field: selectedFieldId,
+        fieldName: selectedFieldName
+        // chosenAnswer: null
+      }
+    });  
+    console.log(firstFieldQuestion);
+    console.log('this is go to');
 }
 const questionFunc = (path) => {
   history.push(QUESTION);
 }
     const [fields, setfields] = useState(null);
-    const [firstFieldQuestion, setFirstFieldsQuestion] = useState(null);
+    const [firstFieldQuestion, setFirstFieldQuestion] = useState(null);
     const[selectedFieldId, setSelectedFieldId] = useState();
+    const [selectedFieldName, setselectedFieldName] = useState(null);
 
     const nextQuestionFunction = (event) => {
       event.preventDefault();
@@ -30,9 +39,11 @@ const questionFunc = (path) => {
     }
      
     const selectChangedHandler = event => {
-      console.log('this is the selected field');
-      console.log(event.target.value.name_field);
-      console.log(setSelectedFieldId(event.target.value));    
+      setSelectedFieldId(event.target.value);    
+      var selectedField = fields.find(f => f.id_field == event.target.value);
+      setFirstFieldQuestion(selectedField.id_question);
+      setSelectedFieldId(selectedField.id_field);
+      setselectedFieldName(selectedField.name_field);
     }
  
     useEffect(() => {
@@ -41,11 +52,10 @@ const questionFunc = (path) => {
           try {
             // do db call or API endpoint axios call here and return the promise.
             getFields()
-              .then((res) => {
-                setfields(res);
-                setFirstFieldsQuestion(res.firstFieldQuestion); 
-                resolve(res);
-              })
+            .then((res) => {
+              setfields(res);
+              resolve(res);
+            })
               .catch((err) => {
                 console.log("getFields > err=", err);
                 setfields([]); 
@@ -82,7 +92,7 @@ const questionFunc = (path) => {
                             <label>
                             <input
                                 type="radio" 
-                                value={field}
+                                value={field.id_field}
                                 checked={selectedFieldId == field.id_field}
                                 onChange={selectChangedHandler}/>
                               <span>{field.name_field}</span>
@@ -100,7 +110,7 @@ const questionFunc = (path) => {
                       </button>
                     </div>
                     <div className="col s6">
-                      <button className="btn waves-effect waves-light green right" type="submit" name="next_button" onClick={()=>goTo(NEXT_QUESTION)}>Next
+                      <button className="btn waves-effect waves-light green right" type="submit" name="next_button" onClick={()=>goTo()}>Next
                         <i className="material-icons right">navigate_next</i>
                       </button>
                       <button className="btn waves-effect waves-light green right" type="submit" name="next_button" onClick={()=>questionFunc(QUESTION)}>Test

@@ -15,7 +15,7 @@ export const OneQuestion = () => {
           try {
             
             // do db call or API endpoint axios call here and return the promise.
-            getQuestions()
+            getQuestion()
               .then((res) => {
                 console.log("getQuestion called ", res);
                 setquestion(res);  

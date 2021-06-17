@@ -10,4 +10,5 @@ export {getUserDetails} from './userServices';
 export {getQuestion} from './questionService';
 export {getFields} from './fieldsService'
 export {getNextQuestion} from './nextQuestionService'
+export {getPreviousQuestion} from './previousQuestionService'
  
