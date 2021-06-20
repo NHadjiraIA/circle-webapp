@@ -72,10 +72,10 @@ useEffect(() => {
                   <p> {reports?.lastName} </p> 
                     </span>
                   <div className="row">
-                    <span className="black-text">
-                      <p>The survey </p><br></br>
+                    <span className="card-title green-text">
+                       
                       
-                      <p>this is the report</p>
+                      <p>Your report :</p>
                     </span>
                   </div>
                   {messageReport &&
@@ -90,9 +90,12 @@ useEffect(() => {
                         </div>);
                       })}
                   <div className="row center">
-                    <Button className="waves-effect waves-light btn green"  onClick={()=>goTo(START)}>Start Survey
-                      <i className="material-icons right">send</i>
+                    <Button className="waves-effect waves-light btn green"  onClick={()=>goTo(START)}>PDF VERSION
+                      {/* <i className="material-icons right">send</i> */}
                     </Button>
+                    <button className="btn waves-effect waves-light green right" name="next_button" onClick={()=>goTo()}>SEND BY EMAIL
+                        {/* <i className="material-icons right">navigate_next</i> */}
+                      </button>
                   </div>
                 </div>
               </div>
