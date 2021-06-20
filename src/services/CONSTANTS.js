@@ -27,3 +27,5 @@ export const GET_ONE_QUESTION = (id_question) => BASE_ADDRESS() + '/api/v1/quest
 export const GET_ALL_FIELDS = () => BASE_ADDRESS() + '/fields';
 export const GET_NEXT_QUESTION = (id_question,id_chosen_answer,id_field) => BASE_ADDRESS() + '/api/v1/questions/next'+'?id_question='+id_question+'&'+'id_chosen_answer='+id_chosen_answer+'&id_field='+id_field;
 export const GET_PREVIOUS_QUESTION = (id_question,id_field) => BASE_ADDRESS() + '/api/v1/questions/previous'+'?id_question='+id_question+'&'+'&id_field='+id_field;
+export const POST_RESPONSE_USER =()=>BASE_ADDRESS()+'/api/v1/response/user';
+export const GET_MESSAGE_REPORT =(id_user,id_field) => BASE_ADDRESS() + '/api/v1/raport/messages'+'?id_user='+id_user+'&id_field='+id_field;

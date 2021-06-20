@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"; 
 import { useHistory, useLocation } from "react-router-dom";
-import { getNextQuestion, getQuestion, getPreviousQuestion} from "services";
+import { getNextQuestion, getQuestion, getPreviousQuestion, postMessageReport} from "services";
 import {Question} from "components/Question"
 // import { Radio } from "components/RadioComponent";
 import '../styles/materialize.css';
@@ -8,15 +8,23 @@ import '../styles/materialize.min.css';
 import '../styles/body.css';
 import {NEXT_QUESTION, REPORT, START} from 'navigation/CONSTANTS' 
 import { report } from "pages/Report";
+import uuid from 'react-uuid'
+
+
+
 
 
  
 export const NextQuestion = () => {
+ 
+   
   const history = useHistory();
   const location = useLocation();
   const questionId = location?.state?.question; 
   const fieldName = location?.state?.fieldName;
   const fieldId = location?.state?.field;
+ 
+
   console.log(questionId);
 
 
@@ -32,25 +40,48 @@ export const NextQuestion = () => {
       pathname: REPORT,
       state: { 
         title: fieldName,
+        user: state.id_user,
+        field : fieldId,
         message1: selectedResponseChoiceId
+        
+       
+          // chosenAnswer: null
+      
         // chosenAnswer: null
       }
     });  
-    console.log('this is go to');
+    console.log('this is go to raport');
+    console.log(fieldId)
   }
   const [currentQuestion, setCurrentQuestion] = useState(null);
   const [responseChoices, setResponseChoices] = useState(null);
-  const[selectedResponseChoiceId, setSelectedResponseChoiceId] = useState();
+  const [selectedResponseChoiceId, setSelectedResponseChoiceId] = useState();
   const [isFirstQuestion, setIsFirstQuestion] = useState(true);
   const [isLastQuestion, setIsLastQuestion] = useState(false);
   const [nextButtonTitle, setNextButtonTitle] = useState('Next');
   const [previousButtonTitle, setPreviousButtonTitle] = useState('Start');
   const [showLastMessageSurvey, setshowLastMessageSurvey] = useState(false);
+  const [codeUserResponse, setCodeUserResponse]=useState(null);
+  const[state = {
+    id_field : '',
+    id_question: '', 
+    code_user_response:'',
+    id_user: '',
+    id_chosen_answer: ''
+    
+                 }, setState] = useState(null); 
    
   // handel the radio button
   const selectChangedHandler = event => {
-    setSelectedResponseChoiceId(event.target.value);
-    console.log(setCurrentQuestion);
+    setSelectedResponseChoiceId(event.target.value); 
+    setState({ 
+      id_field : fieldId,
+      id_question: currentQuestion?.id, 
+      code_user_response: codeUserResponse,
+      id_user: 3,
+      id_chosen_answer: parseInt(event.target.value,10)
+    });
+    console.log(event);
   }
   // display the next question according to the choice of the previous question 
   const goToNextQuestion = (event) => {
@@ -68,9 +99,19 @@ export const NextQuestion = () => {
   }
   const getNextQuestionRequest = (id, selectedResponseChoiceId, fieldId) => {
       try{
-         
+          
            getNextQuestion(id, selectedResponseChoiceId, fieldId)
             .then((res)=>{
+              var requestDto = {
+                "id_field": state.id_field,
+                "id_question": state.id_question,
+                "code_user_response":codeUserResponse,
+                "id_user": state.id_user,
+                "id_chosen_answer": state.id_chosen_answer
+                
+              };
+              postMessageReport(requestDto);
+
               if(res == null){
                 //handle the end of the survey
                 setIsLastQuestion(true);
@@ -79,12 +120,12 @@ export const NextQuestion = () => {
                 setResponseChoices(null);
                 setPreviousButtonTitle('Previous'); 
                 setshowLastMessageSurvey(true);
-                 
               }
-              setCurrentQuestion(res);  
-              setResponseChoices(res.responseChoices);
-              setPreviousButtonTitle('Previous'); 
-             
+              else{
+                setCurrentQuestion(res);  
+                setResponseChoices(res.responseChoices);
+                setPreviousButtonTitle('Previous'); 
+              }
             }).catch((err) => {
               console.log("getNextQuestion > err=", err);
               setCurrentQuestion([]); 
@@ -121,6 +162,7 @@ export const NextQuestion = () => {
               }
               setCurrentQuestion(res);  
               setResponseChoices(res.responseChoices);
+             
               setIsFirstQuestion(false);
             }).catch((err) => {
               console.log("getNextQuestion > err=", err);
@@ -135,10 +177,14 @@ export const NextQuestion = () => {
       return new Promise((resolve, reject) => {
             getQuestion(questionId)
             .then((res) => {
+             
               setCurrentQuestion(res); 
               setResponseChoices(res.responseChoices);
               setIsFirstQuestion(false); 
-                        
+              var codeUserResponseGuid = uuid();
+              setCodeUserResponse(codeUserResponseGuid);
+              console.log(codeUserResponse);
+                     
               resolve(res);
             })
             .catch((err) => {
