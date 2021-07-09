@@ -1,10 +1,12 @@
 export const ROOT = "/";
-export const LOGIN = "/login";
+//export const LOGIN = "/login";
 export const DASHBOARD = "/dashboard";
 export const START = "/fieldQuestion";
 export const NEXT_QUESTION = "/nextQuestion"
 export const REPORT = "/reports";
 export const QUESTION ="/Questions";
+export const LOGIN = "/LoginQutionnaire";
+export const REGISTER = "/CreateUser";
 export const PAGE1 = "/page1";
 export const AUTH_PAGE1 = "/authorized1";
 export const TEST = "/test";

@@ -3,7 +3,7 @@ import { useHistory } from "react-router-dom";
 import { getFields } from "services";
 import {Question} from "components/Question"
 import {NEXT_QUESTION} from 'navigation/CONSTANTS'
-import {QUESTION} from 'navigation/CONSTANTS'  
+import {LOGIN} from 'navigation/CONSTANTS'  
 // import { Radio } from "components/RadioComponent";
 import '../styles/materialize.css';
 import '../styles/materialize.min.css';
@@ -25,7 +25,17 @@ export const FieldQuestion = () => {
     console.log('this is go to');
 }
 const questionFunc = (path) => {
-  history.push(QUESTION);
+  history.push({
+    pathname:  LOGIN,
+    state: { 
+      question: firstFieldQuestion,
+      field: selectedFieldId,
+      fieldName: selectedFieldName
+      // chosenAnswer: null
+    }
+  });  
+  console.log(firstFieldQuestion);
+  console.log('this is go to');
 }
     const [fields, setfields] = useState(null);
     const [firstFieldQuestion, setFirstFieldQuestion] = useState(null);
@@ -113,7 +123,7 @@ const questionFunc = (path) => {
                       <button className="btn waves-effect waves-light green right" type="submit" name="next_button" onClick={()=>goTo()}>Next
                         <i className="material-icons right">navigate_next</i>
                       </button>
-                      <button className="btn waves-effect waves-light green right" type="submit" name="next_button" onClick={()=>questionFunc(QUESTION)}>Test
+                      <button className="btn waves-effect waves-light green right" type="submit" name="next_button" onClick={()=>questionFunc()}>Test
                         <i className="material-icons right">navigate_next</i>
                       </button>
                     </div>

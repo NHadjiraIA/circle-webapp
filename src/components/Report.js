@@ -5,7 +5,7 @@ import { useHistory, useLocation } from "react-router-dom";
 //import { LanguageSelection } from './components/LanguageSelection'
 import {  getMessageReport} from "services";
 import {Typography, Button} from '@material-ui/core'
-import {START , ROOT} from 'navigation/CONSTANTS' 
+import {START , ROOT,NEXT_QUESTION} from 'navigation/CONSTANTS' 
 import {REPORT} from 'navigation/CONSTANTS' 
 import { report } from "pages/Report";
  
@@ -17,15 +17,32 @@ export const Report = () => {
   const fieldNameSelected = location?.state?.title;
   const userId = location?.state?.user;
   const contentReport = location?.state?.message1;
+  const survery_answer_code = location?.state?.survery_answer_code;
+  const firstQuestionId = location?.state?.firstQuestion;
   const [reports, setReports] = useState(null);
   const [messageReport, setMessageReport] = useState(null);
-  console.log(fieldIdSelected)
+  console.log(survery_answer_code)
+
+  const updateSurvey = () =>{
+    history.push({
+      pathname: NEXT_QUESTION,
+      state: { 
+        survery_code : survery_answer_code,
+        userId : userId,
+        question : firstQuestionId,
+        isUpdate :true
+        // chosenAnswer: null
+      }
+    });  
+    
+    console.log('this is go to');
+  }
 
   const goTo = () =>   {  
     history.push({
       pathname: REPORT,
       state: { 
-        
+        survery_code : survery_answer_code
         // chosenAnswer: null
       }
     });  
@@ -73,8 +90,6 @@ useEffect(() => {
                     </span>
                   <div className="row">
                     <span className="card-title green-text">
-                       
-                      
                       <p>Your report :</p>
                     </span>
                   </div>
@@ -91,6 +106,9 @@ useEffect(() => {
                       })}
                   <div className="row center">
                     <Button className="waves-effect waves-light btn green"  onClick={()=>goTo(START)}>PDF VERSION
+                      {/* <i className="material-icons right">send</i> */}
+                    </Button>
+                    <Button className="waves-effect waves-light btn green"  onClick={()=>updateSurvey()}>Update
                       {/* <i className="material-icons right">send</i> */}
                     </Button>
                     <button className="btn waves-effect waves-light green right" name="next_button" onClick={()=>goTo()}>SEND BY EMAIL

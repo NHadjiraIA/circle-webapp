@@ -2,27 +2,26 @@
 
 import { SYSTEM_ERROR } from "../config/CONSTANTS";
 import axios from 'axios'
-import { GET_PREVIOUS_QUESTION,DELETE_MESSAGE_REPORT } from "./CONSTANTS";
+import { POST_LOGIN_USER} from "./CONSTANTS";
 
 /**
  * Function to fetch all the users.
  */
-var id_question = '';
-var id_chosen_answer = '';
-export const getPreviousQuestion = (id_question,id_field) => {
-  return new Promise((resolve, reject) => {
+ 
+export const postLogin = (hadjira) => {
+   console.log(hadjira);
+  return new Promise((reject) => {
     try {
       // do an SDK, DB call or API endpoint axios call here and return the promise.
       axios 
-      .get(GET_PREVIOUS_QUESTION(id_question,id_field))
-      .then((res) => {
-        console.log(res);
-        console.log("getChoicesOfPreviousQuestion > axios res=", res);
-        resolve(res.data);
-        console.log(res.data[0])
+      
+      .post(POST_LOGIN_USER(), hadjira)
+      console.log(hadjira)
+      .then(res => {
+        console.log("int he post response");
       })
       .catch((err) => {
-        console.log("getChoicesOfQuestion > axios err=", err);
+        console.log("postChoicesOfQuestion > axios err=", err);
         reject("Error in getChoicesOfQuestion axios!");
       });
     } catch (error) {

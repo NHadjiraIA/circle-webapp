@@ -4,10 +4,30 @@ import '../styles/body.css'
 import '../styles/materialize.css'
 import '../styles/materialize.min.css'
 import Logo from '../assets/images/logo.png';
+import {useHistory} from 'react-router-dom'
+import { LOGIN } from 'navigation/CONSTANTS';
+import {START , ROOT} from 'navigation/CONSTANTS' 
 
 export const HeaderNav = () => {
-  const Logout = () => {    
-  }
+  const history = useHistory();
+  const goTo = () =>   {  
+    
+     
+}
+  const LogIn = () => {   
+    //alert('you can singin')
+    // history.push({
+    //   pathname: LOGIN,
+    //   state: { 
+    //     // question: firstFieldQuestion,
+    //     // field: selectedFieldId,
+    //     // fieldName: selectedFieldName
+    //     // chosenAnswer: null
+    //   }
+    // }); 
+    console.log('I am login')
+  }  
+  
     return (
     <>
       <head>
@@ -22,10 +42,11 @@ export const HeaderNav = () => {
              <div className="nav-wrapper">
                  <a href="#" className="brand-logo"><img src={Logo} width="190" height="65"/></a>
                  <ul id="nav-mobile" className="right hide-on-med-and-down">
-                 <li><a className="waves-effect waves-light btn green" onClick={Logout}>Logout</a></li>
+                 <li><a className="waves-effect waves-light btn green" href= "/LoginQutionnaire">LogIn</a></li>
                  <li><a className="waves-effect waves-light btn green" href="#">Contact</a></li>
                   </ul>
               </div>
+               
             </nav>
       </div>
     </header>

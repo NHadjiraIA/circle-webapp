@@ -1,13 +1,13 @@
 import React from 'react'
-import Report from 'components/Report'
+import NextQuestion from 'components/NextQuestion'
 import Questions from 'components/Questions'
 
-export const report = () => {
+export const CreateUser = () => {
     return (
         <div>
              
+             <h1> here for create user</h1>    
                  
-                <Report/>
         </div>
     )
 }

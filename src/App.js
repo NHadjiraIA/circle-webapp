@@ -12,12 +12,13 @@ import { ThemeSwitch } from "components/ThemeSwitch";
 import { dark, light } from "styles/muiTheme";
 import "./App.css";
 import { ProvideAuth } from "navigation/Auth/ProvideAuth";
-import {HeaderNav} from "components/HeaderNav";
- 
+import {HeaderNav} from "components/HeaderNav" 
+
  
 // Redux
 import { Provider } from "react-redux";
 import {store} from "redux/store";
+import { NavLinks } from "pages/Home/components/NavLinks";
  
  
 
@@ -34,7 +35,7 @@ function App() {
       
          
         <HeaderNav/>
-          
+        
         <Provider store={store}>
             <ProvideAuth>
               <BrowserRouter>
