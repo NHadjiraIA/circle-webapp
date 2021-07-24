@@ -21,7 +21,7 @@
  
 export const BASE_ADDRESS = () => 'http://localhost:5000'
 export const GET_ALL_USERS = () => `/data/users`;
-export const GET_USER_DETAILS = (id) => `/data/user`;
+// export const GET_USER_DETAILS = (id) => `/data/user`;
 export const GET_ALL_QUESTIONS = () => BASE_ADDRESS() + '/question';
 export const GET_ONE_QUESTION = (id_question) => BASE_ADDRESS() + '/api/v1/questions/'+id_question;
 export const GET_ALL_FIELDS = () => BASE_ADDRESS() + '/fields';
@@ -32,3 +32,6 @@ export const GET_MESSAGE_REPORT =(id_user,id_field) => BASE_ADDRESS() + '/api/v1
 export const DELETE_MESSAGE_REPORT =(id_user,id_question,survery_answer_code)=>BASE_ADDRESS()+'/api/v1/responses'+'?id_user='+id_user+'&id_question='+id_question+'&survery_answer_code='+survery_answer_code;
 export const GET_QUESTION_ANSWERED = (id_user,id_question,survery_answer_code)=>BASE_ADDRESS()+'/api/v1/questions/answered'+'?id_question='+id_question+'&id_user='+id_user+'&code_user_response='+survery_answer_code;
 export const POST_LOGIN_USER = ()=>BASE_ADDRESS()+'/login';
+export const PUT_USER_ANSWER = () => BASE_ADDRESS() + '/api/v1/answers'
+export const DELETE_NEXT_ANSWERS = () => BASE_ADDRESS() + '/api/v1/answers'
+export const GET_USER_DETAILS = (email) => BASE_ADDRESS() + '/api/v1/users?email='+email;

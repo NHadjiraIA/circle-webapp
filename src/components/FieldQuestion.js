@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"; 
-import { useHistory } from "react-router-dom";
+import { useHistory ,useLocation} from "react-router-dom";
 import { getFields } from "services";
 import {Question} from "components/Question"
 import {NEXT_QUESTION} from 'navigation/CONSTANTS'
@@ -11,14 +11,23 @@ import '../styles/body.css';
 
 export const FieldQuestion = () => {
   const history = useHistory();
+  const location = useLocation();
+  const email = location?.state?.email;
+  const userId = location?.state?.userId;
+  const userFirstName = location?.state?.userFirstName;
+  const userLastName = location?.state?.userLastName;
+  
   const goTo = () =>   {  
     history.push({
       pathname: NEXT_QUESTION,
       state: { 
         question: firstFieldQuestion,
         field: selectedFieldId,
-        fieldName: selectedFieldName
-        // chosenAnswer: null
+        fieldName: selectedFieldName,
+        userId : userId,
+        email: email,
+        userFirstName: userFirstName,
+        userLastName: userLastName
       }
     });  
     console.log(firstFieldQuestion);
@@ -89,6 +98,7 @@ const questionFunc = (path) => {
               <form onSubmit={nextQuestionFunction}>
                 <div className="card">
                   <div className="card-content">
+                  <h4 className="card-title green-text">logged in As : {email}</h4>
                     <span className="card-title green-text">Please choose your industry from below</span>
                     <div className="row">
                       <div className="col s12">
@@ -121,9 +131,6 @@ const questionFunc = (path) => {
                     </div>
                     <div className="col s6">
                       <button className="btn waves-effect waves-light green right" type="submit" name="next_button" onClick={()=>goTo()}>Next
-                        <i className="material-icons right">navigate_next</i>
-                      </button>
-                      <button className="btn waves-effect waves-light green right" type="submit" name="next_button" onClick={()=>questionFunc()}>Test
                         <i className="material-icons right">navigate_next</i>
                       </button>
                     </div>

@@ -6,7 +6,7 @@
  */ 
 
 export {getAllUsers} from './userServices';
-export {getUserDetails} from './userServices';
+// export {getUserDetails} from './userServices';
 export {getQuestion} from './questionService';
 export {getFields} from './fieldsService';
 export {getNextQuestion} from './nextQuestionService';
@@ -16,3 +16,6 @@ export {getMessageReport} from './messageReportService';
 export {deleteMessageReport} from './deleteMessageReportService';
 export {getResponseOfQuestionToUpdate} from './ResponseQuestionToUpdateService';
 export {postLogin} from './loginService';
+export {deleteNextAnswers} from './nextQuestionService'
+export {putUserAnswer} from './nextQuestionService'
+export {getUserDetails} from './loginService'

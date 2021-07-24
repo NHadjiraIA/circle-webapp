@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react"; 
+import React, { useEffect, componentDidMount, useState } from "react"; 
 import { useHistory, useLocation } from "react-router-dom";
-import { getNextQuestion, getQuestion, getPreviousQuestion, postMessageReport,deleteMessageReport,getResponseOfQuestionToUpdate } from "services";
+import { getNextQuestion, getQuestion, deleteNextAnswers, getPreviousQuestion, postMessageReport,deleteMessageReport,getResponseOfQuestionToUpdate, putUserAnswer } from "services";
 import {Question} from "components/Question"
 // import { Radio } from "components/RadioComponent";
 import '../styles/materialize.css';
@@ -9,6 +9,7 @@ import '../styles/body.css';
 import {NEXT_QUESTION, REPORT, START} from 'navigation/CONSTANTS' 
 import { report } from "pages/Report";
 import uuid from 'react-uuid'
+import { PresentToAll } from "@material-ui/icons";
 
 export const NextQuestion = () => {
   const history = useHistory();
@@ -21,15 +22,16 @@ export const NextQuestion = () => {
   const firstQuestionFromReport = location?.state?.firstQuestion;
   const isUpdate = location?.state?.isUpdate;
   const questionId = location?.state?.question; 
-  const userId = '3';
-  console.log('codeSurvery = '+codeSurvery);
-  console.log('isUpdate = '+isUpdate);
-  console.log('survery_code = '+firstQuestionFromReport);
+  const selectedAnswerId = undefined;
+  const userId = location?.state?.userId == null ? 1: location.state.userId;
+  const email = location?.state?.email;
+  const userFirstName = location?.state?.userFirstName;
+  const userLastName = location?.state?.userLastName;
+  let changedAnswer = false;
 
   const goToStart = () => {
     history.push({
       pathname: START
-       
     });  
     console.log('this is go to');
   }
@@ -38,11 +40,14 @@ export const NextQuestion = () => {
       pathname: REPORT,
       state: { 
         title: fieldName,
-        user: state.id_user,
+        user: userId,
         field : fieldId,
         message1: selectedResponseChoiceId,
         survery_answer_code:codeUserResponse,
-        firstQuestion : questionId
+        firstQuestion : questionId,
+        email: email,
+        userFirstName: userFirstName,
+        userLastName:userLastName
       }
     });  
     console.log('this is go to raport');
@@ -58,11 +63,12 @@ export const NextQuestion = () => {
   const [showLastMessageSurvey, setshowLastMessageSurvey] = useState(false);
   const [codeUserResponse, setCodeUserResponse]=useState(null);
   const [isUpdateState, setIsUpdateState] = useState(isUpdate);
+  const [selectedAnswerIdState, setSelectedAnswerIdState ] = useState(selectedAnswerId)
   const[state = {
     id_field : '',
     id_question: '', 
     code_user_response:'',
-    id_user: '',
+    id_user: userId,
     id_chosen_answer: ''}, setState] = useState(null); 
    
   // handel the radio button
@@ -72,7 +78,7 @@ export const NextQuestion = () => {
       id_field : fieldId,
       id_question: currentQuestion?.id, 
       code_user_response: codeUserResponse,
-      id_user: 3,
+      id_user: userId,
       id_chosen_answer: parseInt(event.target.value,10)
     });
     console.log(event);
@@ -84,27 +90,59 @@ export const NextQuestion = () => {
         //do db call or API endpoint axios call here and return the promise.
         getNextQuestionRequest(currentQuestion.id, selectedResponseChoiceId, fieldId);
       }catch (error) {
-        console.error("Erro while retrieving the next question", error);
+        console.error("Error while retrieving the next question", error);
       }
     }else{
       // if it is the last question display a thank you message
       goToReport();
     }
   }
+  const deleteAllFollowingAnswers = (userIdArg, codeSurvery, questionId) =>{
+    try{
+      deleteNextAnswers(userIdArg, codeSurvery, questionId)
+      .then((res) =>{
+        console.log("All questions that come after %s have been deleted", questionId);
+      }).catch((err) => {
+        console.log("getNextQuestion > deleteAllFollowingAnswers> err=", err);
+        setCurrentQuestion([]); 
+      });
+    }catch(error){
+      console.error("signin error!==", error);
+    }
+  }
+  const updateUserAnswer = (userIdArg, codeSurvery, questionId, answerId) => {
+    try{
+      putUserAnswer(userIdArg, codeSurvery, questionId, answerId)
+      .then((res) =>{
+        console.log("Question''s answer successfully updated!");
+      }).catch((err) => {
+        console.log("getNextQuestion > updateUserAnswer> err=", err);
+        setCurrentQuestion([]); 
+      });
+    }catch(error){
+      console.error("signin error!==", error);
+    }
+  }
   const getNextQuestionRequest = (id, selectedResponseChoiceId, fieldId) => {
       try{
-          
            getNextQuestion(id, selectedResponseChoiceId, fieldId)
             .then((res)=>{
               var requestDto = {
                 "id_field": state.id_field,
                 "id_question": state.id_question,
                 "code_user_response":codeUserResponse,
-                "id_user": state.id_user,
+                "id_user": userId,
                 "id_chosen_answer": state.id_chosen_answer
                 
               };
-              postMessageReport(requestDto);
+              if(!isUpdate){
+                postMessageReport(requestDto);
+              }
+              else if(state.id_chosen_answer !== selectedAnswerIdState){
+                updateUserAnswer(state.id_user, codeSurvery, state.id_question, state.id_chosen_answer);
+                deleteAllFollowingAnswers(state.user_id, codeSurvery, res.id);
+                changedAnswer = true;
+              }
 
               if(res == null){
                 //handle the end of the survey
@@ -119,10 +157,12 @@ export const NextQuestion = () => {
                 setCurrentQuestion(res);  
                 setResponseChoices(res.responseChoices);
                 setPreviousButtonTitle('Previous'); 
+              } 
+              if(isUpdate & !changedAnswer){
+                getQuestionAnswer(userIdFromReport, res.id, codeSurvery);
               }
             }).catch((err) => {
               console.log("getNextQuestion > err=", err);
-              setCurrentQuestion([]); 
             });
           }catch(error){
         console.error("signin error!==", error);
@@ -134,7 +174,6 @@ export const NextQuestion = () => {
       try {
         //do db call or API endpoint axios call here and return the promise. 
         getPreviousQuestionRequest(currentQuestion.id,fieldId);
-        
       }catch (error) {
         console.error("Erro while retrieving the next question", error);
       }
@@ -154,10 +193,6 @@ export const NextQuestion = () => {
       }catch (error) {
         console.error("Erro while retrieving the next question", error);
       }
-    
-           
-      // goToStart();
-    
     console.log("here we delete in next question component ");
     
   }  
@@ -184,68 +219,72 @@ export const NextQuestion = () => {
         }catch(error){
       console.error("signin error!==", error);
     }
-} 
-
-const getUpdateQuestionRequest = (firstQuestionFromReport, userIdFromReport, codeSurvery) => {
-  try{
-     
-    getResponseOfQuestionToUpdate(firstQuestionFromReport, userIdFromReport, codeSurvery)
-        .then((res)=>{
-          console.log(res);
+  } 
+  const getUpdateQuestionRequest = (firstQuestionFromReport, userIdFromReport, codeSurvery) => {
+    try{
+      
+      getResponseOfQuestionToUpdate(firstQuestionFromReport, userIdFromReport, codeSurvery)
+          .then((res)=>{
+            console.log(res);
+              setCurrentQuestion(res); 
+              setResponseChoices(res.responseChoices);
+              
+              // setCurrentQuestion(res);  
+              // setResponseChoices(res.responseChoices);
+            
+              // setIsFirstQuestion(false);
+            }).catch((err) => {
+              console.log("getNextQuestion > err=", err);
+              setCurrentQuestion([]); 
+            });
+        }catch(error){
+      console.error("signin error!==", error);
+    }
+  } 
+  const getQuestionAnswer = (userId, questionId, codeSurvery) => {
+    if(isUpdateState){
+      try{
+        getResponseOfQuestionToUpdate(userIdFromReport,questionId, codeSurvery)
+            .then((res)=>{
+                setSelectedResponseChoiceId(res.id); 
+                setSelectedAnswerIdState(res.id);
+                setState({ 
+                  id_field : fieldId,
+                  id_question: currentQuestion?.id, 
+                  code_user_response: codeUserResponse,
+                  id_user: userId,
+                  id_chosen_answer: res.id
+                });
+              }).catch((err) => {
+                console.log("getNextQuestion > err=", err);
+              });
+          }catch(error){
+        console.error("signin error!==", error);
+      }
+    }
+  }
+  const getQuestionById = () => {
+      getQuestion(questionId)
+          .then((res) => {
             setCurrentQuestion(res); 
             setResponseChoices(res.responseChoices);
-            
-            // setCurrentQuestion(res);  
-            // setResponseChoices(res.responseChoices);
-           
-            // setIsFirstQuestion(false);
-          }).catch((err) => {
-            console.log("getNextQuestion > err=", err);
+            setIsFirstQuestion(false);
+            setIsUpdateState(true); 
+            var codeUserResponseGuid = isUpdate ? codeSurvery : uuid();
+            setCodeUserResponse(codeUserResponseGuid);
+            console.log(codeUserResponse);     
+            getQuestionAnswer(userIdFromReport, questionId, codeSurvery);  
+          })
+          .catch((err) => {
+            console.log("getChoices > err=", err);
             setCurrentQuestion([]); 
           });
-      }catch(error){
-    console.error("signin error!==", error);
   }
-} 
 
-const getQuestionById = () => {
-  return new Promise((resolve, reject) => {
-    getQuestion(questionId)
-        .then((res) => {
-          setCurrentQuestion(res); 
-          setResponseChoices(res.responseChoices);
-          setIsFirstQuestion(false);
-          setIsUpdateState(true); 
-          var codeUserResponseGuid = uuid();
-          setCodeUserResponse(codeUserResponseGuid);
-          console.log(codeUserResponse);       
-          resolve(res);
-        })
-        .catch((err) => {
-          console.log("getChoices > err=", err);
-          setCurrentQuestion([]); 
-          reject("Request error!");
-        });
-      }, []);
-      if(isUpdateState){
-        try{
-          getResponseOfQuestionToUpdate(userIdFromReport,firstQuestionFromReport, codeSurvery)
-              .then((res)=>{
-                console.log(res);
-                  setSelectedResponseChoiceId(res); 
-                }).catch((err) => {
-                  console.log("getNextQuestion > err=", err);
-                });
-            }catch(error){
-          console.error("signin error!==", error);
-        }
-      }
-}
-
-componentDidMount(){
-  getQuestionById();
-}
-      
+  useEffect(() => {
+      getQuestionById();
+  }, [fieldId]);
+          
   return (
     <>
   <div className="container">

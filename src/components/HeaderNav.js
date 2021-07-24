@@ -4,12 +4,13 @@ import '../styles/body.css'
 import '../styles/materialize.css'
 import '../styles/materialize.min.css'
 import Logo from '../assets/images/logo.png';
-import {useHistory} from 'react-router-dom'
+import { useHistory, useLocation } from "react-router-dom";
 import { LOGIN } from 'navigation/CONSTANTS';
 import {START , ROOT} from 'navigation/CONSTANTS' 
 
 export const HeaderNav = () => {
   const history = useHistory();
+  
   const goTo = () =>   {  
     
      
@@ -45,6 +46,7 @@ export const HeaderNav = () => {
                  <li><a className="waves-effect waves-light btn green" href= "/LoginQutionnaire">LogIn</a></li>
                  <li><a className="waves-effect waves-light btn green" href="#">Contact</a></li>
                   </ul>
+                  
               </div>
                
             </nav>

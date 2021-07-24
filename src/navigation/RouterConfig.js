@@ -14,6 +14,7 @@ import { nextQuestion } from "pages/NextQuestion";
 import { Question } from "pages/Question";
 import { report } from "pages/Report";
 import { loginQutionnaire } from "pages/LogIn";
+import { createUser } from "pages/user";
 
 
 export const RouterConfig = () => {
@@ -31,6 +32,7 @@ export const RouterConfig = () => {
         <Route exact path={QUESTION} component={Question}/>
         <Route exact path={REPORT} component={report}/>
         <Route exact path={LOGIN} component={loginQutionnaire}/>
+        <Route exact path={REGISTER} component={createUser}/>
         {/* <Route path="/login">
           <Login />
         </Route> */}

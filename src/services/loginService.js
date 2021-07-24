@@ -2,7 +2,7 @@
 
 import { SYSTEM_ERROR } from "../config/CONSTANTS";
 import axios from 'axios'
-import { POST_LOGIN_USER} from "./CONSTANTS";
+import { GET_USER_DETAILS, POST_LOGIN_USER} from "./CONSTANTS";
 
 /**
  * Function to fetch all the users.
@@ -10,15 +10,17 @@ import { POST_LOGIN_USER} from "./CONSTANTS";
  
 export const postLogin = (hadjira) => {
    console.log(hadjira);
-  return new Promise((reject) => {
+  return new Promise((resolve, reject) => {
     try {
       // do an SDK, DB call or API endpoint axios call here and return the promise.
       axios 
       
-      .post(POST_LOGIN_USER(), hadjira)
-      console.log(hadjira)
-      .then(res => {
-        console.log("int he post response");
+      .post(POST_LOGIN_USER(),hadjira)
+      .then(res => 
+        {
+         resolve(res);
+        console.log("THIS IS THE RESPONSE",res.data.message)
+        console.log("this is response of login service",res.status);
       })
       .catch((err) => {
         console.log("postChoicesOfQuestion > axios err=", err);
@@ -29,6 +31,28 @@ export const postLogin = (hadjira) => {
       reject(SYSTEM_ERROR);
     }
   });
+};
+
+export const getUserDetails = (email) => {
+ return new Promise((resolve, reject) => {
+   try {
+     // do an SDK, DB call or API endpoint axios call here and return the promise.
+     axios 
+     
+     .get(GET_USER_DETAILS(email))
+     .then(res => 
+       {
+        resolve(res);
+     })
+     .catch((err) => {
+       console.log("getUserDetails > axios err=", err);
+       reject("Error in getUserDetails axios!");
+     });
+   } catch (error) {
+     console.error("in loginService > getUserDetails, Err===", error);
+     reject(SYSTEM_ERROR);
+   }
+ });
 };
 
  

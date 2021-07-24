@@ -5,7 +5,7 @@ import { useHistory, useLocation } from "react-router-dom";
 //import { LanguageSelection } from './components/LanguageSelection'
 import {  getMessageReport} from "services";
 import {Typography, Button} from '@material-ui/core'
-import {START , ROOT,NEXT_QUESTION} from 'navigation/CONSTANTS' 
+import {START , ROOT,NEXT_QUESTION, LOGIN} from 'navigation/CONSTANTS' 
 import {REPORT} from 'navigation/CONSTANTS' 
 import { report } from "pages/Report";
  
@@ -16,11 +16,15 @@ export const Report = () => {
   const fieldIdSelected = location?.state?.field;
   const fieldNameSelected = location?.state?.title;
   const userId = location?.state?.user;
+  const email = location?.state?.email;
+  const userFirstName = location?.state?.userFirstName;
+  const userLastName = location?.state?.userLastName;
   const contentReport = location?.state?.message1;
   const survery_answer_code = location?.state?.survery_answer_code;
   const firstQuestionId = location?.state?.firstQuestion;
   const [reports, setReports] = useState(null);
   const [messageReport, setMessageReport] = useState(null);
+  const [userInfo, setUserInfo]  = useState({'email': email, 'firstName': userFirstName, 'lastName': userLastName})
   console.log(survery_answer_code)
 
   const updateSurvey = () =>{
@@ -30,8 +34,24 @@ export const Report = () => {
         survery_code : survery_answer_code,
         userId : userId,
         question : firstQuestionId,
-        isUpdate :true
+        isUpdate :true,
+        field: fieldIdSelected
         // chosenAnswer: null
+      }
+    });  
+    
+    console.log('this is go to');
+  }
+  const goToLogin = () =>{
+    history.push({
+      pathname: LOGIN,
+      state: { 
+        // survery_code : survery_answer_code,
+        // userId : userId,
+        // question : firstQuestionId,
+        // isUpdate :true,
+        // field: fieldIdSelected
+        // // chosenAnswer: null
       }
     });  
     
@@ -85,8 +105,8 @@ useEffect(() => {
                   <span className="card-title green-text center">
                   <p> {fieldNameSelected} </p>
                    <p>{reports?.date}</p>
-                  <p> {reports?.firstName} </p >
-                  <p> {reports?.lastName} </p> 
+                  <p> {userInfo?.firstName} </p >
+                  <p> {userInfo?.lastName} </p> 
                     </span>
                   <div className="row">
                     <span className="card-title green-text">
@@ -105,7 +125,7 @@ useEffect(() => {
                         </div>);
                       })}
                   <div className="row center">
-                    <Button className="waves-effect waves-light btn green"  onClick={()=>goTo(START)}>PDF VERSION
+                    <Button className="waves-effect waves-light btn green"  onClick={()=>goToLogin()}>SAVE REPORT
                       {/* <i className="material-icons right">send</i> */}
                     </Button>
                     <Button className="waves-effect waves-light btn green"  onClick={()=>updateSurvey()}>Update
