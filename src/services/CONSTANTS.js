@@ -19,7 +19,7 @@
 
 // Local endpoints. Uncomment below section to use dummy local data.
  
-export const BASE_ADDRESS = () => 'http://localhost:5000'
+export const BASE_ADDRESS = () => 'https://circle-api.azurewebsites.net'
 export const GET_ALL_USERS = () => `/data/users`;
 // export const GET_USER_DETAILS = (id) => `/data/user`;
 export const GET_ALL_QUESTIONS = () => BASE_ADDRESS() + '/question';
