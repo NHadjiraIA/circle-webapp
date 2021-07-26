@@ -24,7 +24,7 @@ const HomeView = props => {
             <div className="col s12">
               <div className="card">
                 <div className="card-content">
-                  <span className="card-title green-text center">Project Map FOR TEST</span>
+                  <span className="card-title green-text center">Project Map</span>
                   <div className="row">
                     <span className="black-text">
                       <p>The survey measures the environmental practices and behaviours of Canadian companies that relate to the condition of our air, water and soils. The survey is also designed to collect data to develop and improve three key environmental indicators: air quality, water quality and greenhouse gas emissions.
