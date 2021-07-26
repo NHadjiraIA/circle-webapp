@@ -8,7 +8,7 @@ import { GET_ALL_FIELDS } from "./CONSTANTS";
  * Function to fetch all the users.
  */
 export const getFields = () => {
-  console.log("questionService > getQuestions called...");
+  console.log("questionService > getFields called...");
   return new Promise((resolve, reject) => {
     try {
       // do an SDK, DB call or API endpoint axios call here and return the promise.
